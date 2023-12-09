@@ -1,13 +1,238 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@font-face {
+  font-family: "KCC-Ganpan";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: fallback;
+}
+@font-face {
+  font-family: "TheJamsil5Bold";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/TheJamsil5Bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: fallback;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: "KCC-Ganpan";
+  font-size: 1rem;
+  vertical-align: baseline;
+  vertical-align: -webkit-baseline-middle;
+  vertical-align: -moz-middle-with-baseline;
+  box-sizing: border-box;
+}
+
+#root {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100dvw;
+  height: 100dvh;
+  font-family: "KCC-Ganpan";
+}
+main {
+  width: 100dvw;
+  height: calc(100dvh - 50px);
+  box-sizing: border-box;
+  background-color: #10346c;
+}
+.whiteBackground {
+  background-color: white;
+}
+article {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: openModal 1s ease;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10dvh 20px 10dvh 20px;
+  overflow: scroll;
+  scrollbar-width: 0;
+}
+article::-webkit-scrollbar {
+  display: none;
+}
+.recordList {
+  justify-content: flex-start;
+  padding: 20px;
+}
+section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+header {
+  width: 100dvw;
+  height: 50px;
+  line-height: 50px;
+  font-size: 1.2rem;
+  padding-right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav {
+  width: 100dvw;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #10346c;
+}
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30px;
+  font-size: 10px;
+  text-align: right;
+  color: #999;
+  padding-right: 20px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ol,
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+button,
+input,
+select,
+textarea {
+  border: 0;
+  margin: 0;
+  font: inherit;
+  box-sizing: border-box;
+}
+button {
+  cursor: pointer;
+  background-color: transparent;
+}
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+input[type="search"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+textarea {
+  overflow: auto;
+  vertical-align: top;
+  resize: vertical;
+}
+
+@media screen and (max-width: 700px) {
+  main {
+    width: 100dvw;
+  }
 }

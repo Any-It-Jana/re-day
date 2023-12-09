@@ -1,0 +1,41 @@
+.transparent {
+  border: 1px solid transparent;
+  background-color: transparent;
+  color: black;
+}
+.transparent:hover {
+  border: 1px solid transparent;
+  background-color: white;
+  color: black;
+}
+
+.black.bg {
+  border: 1px solid transparent;
+  background-color: black;
+  color: white;
+}
+.black.bg:hover {
+  border: 1px solid black;
+  background-color: white;
+  color: black;
+}
+.white.bg {
+  border: 1px solid transparent;
+  background-color: white;
+  color: rgb(15, 0, 0);
+}
+.white.bg:hover {
+  border: 1px solid white;
+  background-color: black;
+  color: white;
+}
+
+.black.border {
+  border: 1px solid black;
+  background-color: white;
+  color: black;
+}
+.black.border:hover {
+  background-color: black;
+  color: white;
+}
