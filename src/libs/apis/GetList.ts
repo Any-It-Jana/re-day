@@ -1,27 +1,20 @@
-import axios from "axios";
+import instance from "./Instance";
 
 export async function getRecordList(userId: string) {
-  return axios
-    .post(
-      "https://sl6qp09xxc.execute-api.us-east-2.amazonaws.com/test/diary/list",
-      { userId: userId }
-    )
+  return instance
+    .post("/diary/list", { userId: userId })
     .then((response) => {
-      console.log(response.data);
+      // console.log(response);
       return response.data;
     })
     .catch((error) => console.error(error));
 }
 
 export async function getRecordDetail(userId: string, dateKey: string) {
-  axios
-    .post(
-      "https://sl6qp09xxc.execute-api.us-east-2.amazonaws.com/test/diary/detail",
-      { userId: userId, dateTime: dateKey }
-    )
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
+  return instance
+    .post("/diary/detail", { userId: userId, dateTime: dateKey })
+    .then((res) => {
+      return res.data;
     })
     .catch((error) => {
       return error.response;

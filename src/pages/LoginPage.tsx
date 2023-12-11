@@ -1,18 +1,24 @@
 import React, { useState } from "react";
 import Text from "../components/atoms/Text";
-import awsconfig from "../../awsconfig.js";
-import { CognitoUser } from "amazon-cognito-identity-js";
 import Input from "../components/atoms/Input";
 import Button from "../components/atoms/Button";
 import { useNavigate } from "react-router-dom";
+import { signin } from "../libs/apis/Auth";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
 
-  const login = () => {
-    navigate("/list");
+  const login = async () => {
+    const response = await signin(email, pw);
+    if (response.statusCode !== 200) {
+      alert(response.message);
+      setEmail("");
+      setPw("");
+    } else {
+      navigate("/list");
+    }
   };
   const register = () => {
     navigate("/register");

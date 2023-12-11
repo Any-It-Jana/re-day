@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getRecordList } from "../libs/apis/GetList";
+import { getRecordDetail, getRecordList } from "../libs/apis/GetList";
 
 const TestPage = () => {
   const [count, setCount] = useState(0);
@@ -14,6 +14,9 @@ const TestPage = () => {
     // };
 
     getRecordList("1");
+    getRecordDetail("1", "2023-12-10T12:02").then((res) => {
+      console.log(res);
+    });
   }, []);
 
   return (

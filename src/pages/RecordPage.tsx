@@ -39,7 +39,7 @@ const RecordPage = () => {
     recorderControls.stopRecording();
   };
   const finishRecording = async (blob: Blob) => {
-    await createPresinedURL(new File([blob], `${email}_${dateKey}`));
+    await createPresinedURL(new File([blob], `${email}_${dateKey}.m4a`));
     navigate(`/loading/${dateKey}`);
   };
 
@@ -60,6 +60,7 @@ const RecordPage = () => {
         src="/mic.svg"
         height={150}
         width={200}
+        alt="mic"
       />
 
       <ProgessWrapper>

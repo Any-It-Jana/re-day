@@ -3,16 +3,38 @@ import Text from "../components/atoms/Text";
 import awsconfig from "../../awsconfig.js";
 import Input from "../components/atoms/Input";
 import Button from "../components/atoms/Button";
+import { emailConfirm, signup } from "../libs/apis/Auth";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [pwConfirm, setPwConfirm] = useState("");
   const [hasAuthCode, setHasAuthCode] = useState(false);
   const [authcode, setAuthcode] = useState("");
 
-  const register = async () => {};
-  const sendAuthCode = async () => {};
+  const register = async () => {
+    const response = await signup(email, pw);
+    if (response.statusCode !== 200) {
+      alert(response.message);
+      setEmail("");
+      setPw("");
+      setPwConfirm("");
+    } else {
+      setHasAuthCode(true);
+    }
+  };
+  const sendAuthCode = async () => {
+    const response = await emailConfirm(email, authcode);
+    if (response.statusCode !== 200) {
+      alert(response.message);
+      setAuthcode("");
+    } else {
+      alert("회원가입 완료!\n로그인 해주세요");
+      navigate("/");
+    }
+  };
 
   return (
     <article className="login">
