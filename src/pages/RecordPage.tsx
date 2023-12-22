@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import Text from "../components/atoms/Text";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 import Button from "../components/atoms/Button";
-import { createPresinedURL } from "../libs/apis/UploadRecord";
 import UserStore from "../libs/store/UserStore";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
 const RecordPage = () => {
   const navigate = useNavigate();
@@ -20,69 +21,67 @@ const RecordPage = () => {
   //   }
   // }, []);
 
-  const recorderControls = useAudioRecorder();
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+
   const startRecording = () => {
+    SpeechRecognition.startListening({
+      language: "ko-KR",
+      continuous: true,
+    });
     let t = 0;
     const timer = setInterval(() => {
       setTime((prev) => prev + 1);
       t += 1;
       if (t === 5) {
-        recorderControls.stopRecording();
+        SpeechRecognition.stopListening();
         clearInterval(timer);
         setIsFinished(true);
-        // async 함수로 S3에 전송하는 거 필요함
       }
     }, 1000);
   };
+  const finishRecording = () => {};
 
-  const stopRecording = () => {
-    recorderControls.stopRecording();
-  };
-  const finishRecording = async (blob: Blob) => {
-    await createPresinedURL(new File([blob], `${email}_${dateKey}.m4a`));
-    navigate(`/loading/${dateKey}`);
-  };
-
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>;
+  }
   return (
-    <article>
-      <Text color="white" fontSize={1.5}>
-        당신의 하루는 어땠나요?
-      </Text>
-      <img
-        onClick={() => {
-          if (recorderControls.isRecording) {
-            recorderControls.stopRecording();
-          } else {
-            recorderControls.startRecording();
-            startRecording();
-          }
-        }}
-        src="/mic.svg"
-        height={150}
-        width={200}
-        alt="mic"
-      />
+    <article className="record">
+      <TranscriptWrapper>
+        {transcript === "" ? (
+          <Text color="white" fontSize={1.5}>
+            오늘 하루는 어땠나요?
+          </Text>
+        ) : (
+          <Text color="white">{transcript}</Text>
+        )}
+      </TranscriptWrapper>
+
+      <Row visibility={isFinished ? "visible" : "hidden"}>
+        <Button type="bg" color="white" onClick={finishRecording}>
+          분석하기!
+        </Button>
+        <Button type="border" color="white" onClick={resetTranscript}>
+          초기화
+        </Button>
+      </Row>
 
       <ProgessWrapper>
-        <Div>
-          <AudioRecorder
-            onRecordingComplete={(blob) => {
-              finishRecording(blob);
-              console.log(blob);
-            }}
-            audioTrackConstraints={{
-              noiseSuppression: true,
-              echoCancellation: true,
-            }}
-            downloadOnSavePress={true}
-            downloadFileExtension="mp3"
-            recorderControls={recorderControls}
-          />
-        </Div>
+        <img
+          style={{ cursor: "pointer" }}
+          onClick={listening ? SpeechRecognition.stopListening : startRecording}
+          src="/mic.svg"
+          height={100}
+          alt="mic"
+        />
         <Text color="white" fontSize={1.5}>
           {isFinished
-            ? "ㅤ"
-            : recorderControls.isRecording === false
+            ? listening
+            : 1
             ? "마이크를 눌러 시작하세요!"
             : `${time}초`}
         </Text>
@@ -90,14 +89,6 @@ const RecordPage = () => {
           <ProgressBar width={`${(time * 100) / 60}%`} />
         </ProgressBarBackground>
       </ProgessWrapper>
-
-      <Button
-        style={{ visibility: isFinished ? "visible" : "hidden" }}
-        type="bg"
-        color="white"
-        onClick={stopRecording}>
-        분석하기!
-      </Button>
     </article>
   );
 };
@@ -105,6 +96,7 @@ const RecordPage = () => {
 const ProgessWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   gap: 20px;
 `;
 const ProgressBarBackground = styled.div`
@@ -119,10 +111,19 @@ const ProgressBar = styled.div<{ width: string }>`
   border-radius: 5px;
   background-color: #7fec7f;
 `;
-
-const Div = styled.div`
-  /* height: 0px;
-  visibility: hidden; */
+const Row = styled.div<{ visibility: string }>`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  visibility: ${(props) => props.visibility};
+`;
+const TranscriptWrapper = styled.div`
+  height: 300px;
+  overflow: scroll;
+  scrollbar-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 export default RecordPage;

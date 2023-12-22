@@ -146,6 +146,9 @@ article::-webkit-scrollbar {
   justify-content: flex-start;
   padding: 20px;
 }
+.record {
+  padding: 20px;
+}
 section {
   width: 100%;
   display: flex;

@@ -22,11 +22,11 @@
 .white.bg {
   border: 1px solid transparent;
   background-color: white;
-  color: rgb(15, 0, 0);
+  color: black;
 }
 .white.bg:hover {
   border: 1px solid white;
-  background-color: black;
+  background-color: transparent;
   color: white;
 }
 
@@ -38,4 +38,12 @@
 .black.border:hover {
   background-color: black;
   color: white;
+}
+.white.border {
+  border: 1px solid white;
+  color: white;
+}
+.white.border:hover {
+  background-color: white;
+  color: black;
 }
