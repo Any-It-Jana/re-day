@@ -52,6 +52,13 @@ const RecordPage = () => {
   };
   // 종료 및 text 데이터 서버로 전송
   const finishRecording = async () => {
+    if (transcript === "") {
+      alert("녹음이 되지 않았어요!!!");
+      setTime(0);
+      setIsFinished(false);
+      resetTranscript();
+      return;
+    }
     await uploadText(userEmail, dateKey, transcript);
     navigate(`/loading/${dateKey}`);
   };
