@@ -9,6 +9,15 @@ type Props = {
   emotion?: string;
 };
 
+// date 형식 변경: 2023_03_31T04_37 -> 2023/03/31 04:37
+export const dateFormatting = (timestamp: String) => {
+  const timeset = timestamp.split('T');
+  const date = timeset[0];
+  const time = timeset[1];
+  
+  return date.replaceAll('_', '/') + ' ' + time.replaceAll('_', ':');;
+}
+
 const RecordListItem = ({
   date = "2023-11-11",
   color = "black",
@@ -17,8 +26,8 @@ const RecordListItem = ({
   return (
     <Link to={`/detail/${date}`}>
       <ItemBox color={color}>
-        <Text color="white">{date}</Text>
-        <Text color="white">{emotion}</Text>
+        <Text color="white">{dateFormatting(date)}</Text>
+        {/* <Text color="white">{emotion}</Text> */}
       </ItemBox>
     </Link>
   );

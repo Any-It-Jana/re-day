@@ -1,0 +1,145 @@
+import React, { useEffect, useState } from "react";
+import Text from "../components/atoms/Text";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
+import Button from "../components/atoms/Button";
+import { createPresinedURL } from "../libs/apis/UploadRecord";
+import { useStore } from "../libs/store/UserStore";
+
+// 한국 시간 +9 hour 작업
+const getKoreanTime = () => {
+  const offset = new Date().getTimezoneOffset() * 60000;
+  const today = new Date(Date.now() - offset);
+  return today.toISOString();
+}
+
+const RecordPage = () => {
+  const navigate = useNavigate();
+  const [time, setTime] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
+  const { isLoggedIn, userEmail } = useStore();
+  const dateKey = `${getKoreanTime().slice(0, 16).replace(':', '-')}`;
+  const { setDateKey } = useStore();
+
+  useEffect(() => {
+    const token = localStorage.getItem("Re-day-token");
+    if (token === null) {
+      alert("로그인이 필요합니다.");
+      navigate("/");
+    }
+    
+    setDateKey(dateKey);
+  }, []);
+
+  const recorderControls = useAudioRecorder();
+  const startRecording = () => {
+    let t = 0;
+    const timer = setInterval(() => {
+      setTime((prev) => prev + 1);
+      t += 1;
+      // 녹음 길이 최대 60초 제한 사항
+      if (t === 60) {
+        recorderControls.stopRecording();
+        clearInterval(timer);
+        setIsFinished(true);
+        // async 함수로 S3에 전송하는 거 필요함
+      }
+    }, 1000);
+  };
+
+  const stopRecording = () => {
+    recorderControls.stopRecording();
+  };
+  const finishRecording = async (blob: Blob) => {
+    await createPresinedURL(new File([blob], `${userEmail}_${dateKey}.webm`, {
+      type: 'audio/webm'
+    }));
+    navigate(`/loading/${dateKey}`);
+  };
+
+  return (
+    <article>
+      <Text color="white" fontSize={1.5}>
+        당신의 하루는 어땠나요?
+      </Text>
+      <img
+        onClick={() => {
+          if (recorderControls.isRecording) {
+            recorderControls.stopRecording();
+          } else {
+            recorderControls.startRecording();
+            startRecording();
+          }
+        }}
+        src="/mic.svg"
+        height={150}
+        width={200}
+        alt="mic"
+      />
+
+      <ProgessWrapper>
+        <Div style={{display: 'hidden'}}>
+          <AudioRecorder
+            onRecordingComplete={(blob) => {
+              blob = blob.slice(0, blob.size, "audio/webm");
+              console.log("BLOB:", blob);
+              // setDateKey(dateKey);
+              finishRecording(blob);
+            }}
+            audioTrackConstraints={{
+              noiseSuppression: true,
+              echoCancellation: true,
+            }}
+            downloadOnSavePress={false}
+            // downloadFileExtension="mp3"
+            recorderControls={recorderControls}
+          />
+        </Div>
+        <Text color="white" fontSize={1.5}>
+          {isFinished
+            ? "ㅤ"
+            : recorderControls.isRecording === false
+            ? "마이크를 눌러 시작하세요!"
+            : `${time}초`}
+        </Text>
+        <ProgressBarBackground>
+          <ProgressBar width={`${(time * 100) / 60}%`} />
+        </ProgressBarBackground>
+      </ProgessWrapper>
+
+      <Button
+        style={{ visibility: isFinished ? "visible" : "hidden" }}
+        type="bg"
+        color="white"
+        onClick={stopRecording}>
+        분석하기!
+      </Button>
+    </article>
+  );
+};
+
+const ProgessWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+const ProgressBarBackground = styled.div`
+  width: 80dvw;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #eee;
+`;
+const ProgressBar = styled.div<{ width: string }>`
+  width: ${(props) => props.width};
+  height: 10px;
+  border-radius: 5px;
+  background-color: #7fec7f;
+`;
+
+const Div = styled.div`
+  height: 0px;
+  visibility: hidden;
+`;
+
+export default RecordPage;

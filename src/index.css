@@ -128,7 +128,8 @@ main {
   background-color: white;
 }
 article {
-  height: 100%;
+  width: 100dvw;
+  height: calc(100dvh - 50px);
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -173,6 +174,7 @@ nav {
   display: flex;
   justify-content: space-between;
   background-color: #10346c;
+  /* background-color: transparent; */
 }
 footer {
   position: absolute;
@@ -238,4 +240,25 @@ textarea {
   main {
     width: 100dvw;
   }
+}
+
+.reday-enter {
+  position: absolute;
+  width: 100dvw;
+  height: calc(100dvh - 50px);
+  opacity: 0;
+}
+.reday-enter-active {
+  transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
+  opacity: 1;
+}
+.reday-exit {
+  position: absolute;
+  width: 100dvw;
+  height: calc(100dvh - 50px);
+  opacity: 1;
+}
+.reday-exit-active {
+  transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
+  opacity: 0;
 }

@@ -3,23 +3,29 @@ import Text from "../components/atoms/Text";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../components/atoms/Button";
-import UserStore from "../libs/store/UserStore";
+import { userStore } from "../libs/store/UserStore";
+import { uploadText } from "../libs/apis/UploadRecord";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+
+// 한국 시간 +9 hour 작업
+const getKoreanTime = () => {
+  const offset = new Date().getTimezoneOffset() * 60000;
+  const today = new Date(Date.now() - offset);
+  return today.toISOString();
+};
 
 const RecordPage = () => {
   const navigate = useNavigate();
   const [time, setTime] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
-  const { isLoggedIn, email } = UserStore();
-  const dateKey = `${new Date().toISOString().slice(0, 16)}`;
+  const { userEmail, setDateKey } = userStore();
+  const dateKey = `${getKoreanTime().slice(0, 16).replace(":", "-")}`;
 
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     navigate("/");
-  //   }
-  // }, []);
+  useEffect(() => {
+    setDateKey(dateKey);
+  }, []);
 
   const {
     transcript,
@@ -37,14 +43,18 @@ const RecordPage = () => {
     const timer = setInterval(() => {
       setTime((prev) => prev + 1);
       t += 1;
-      if (t === 5) {
+      if (t === 10) {
         SpeechRecognition.stopListening();
         clearInterval(timer);
         setIsFinished(true);
       }
     }, 1000);
   };
-  const finishRecording = () => {};
+  // 종료 및 text 데이터 서버로 전송
+  const finishRecording = async () => {
+    await uploadText(userEmail, dateKey, transcript);
+    navigate(`/loading/${dateKey}`);
+  };
 
   if (!browserSupportsSpeechRecognition) {
     return <span>Browser doesn't support speech recognition.</span>;

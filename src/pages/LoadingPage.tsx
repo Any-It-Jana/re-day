@@ -3,16 +3,17 @@ import Text from "../components/atoms/Text";
 import Spinner from "../components/atoms/Spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import { getRecordDetail } from "../libs/apis/GetList";
-import UserStore from "../libs/store/UserStore";
+import { userStore } from "../libs/store/UserStore";
 
 const LoadingPage = () => {
-  const navigate = useNavigate();
   const { dateKey } = useParams();
-  const { userId } = UserStore();
+  const { userToken } = userStore();
+  const navigate = useNavigate();
 
   const [loadingText, setLoadingText] = useState("분석 중...");
   useEffect(() => {
     let t = 7;
+
     const timer = setInterval(() => {
       if (t === 7) {
         setLoadingText("분석 중.");
@@ -24,16 +25,21 @@ const LoadingPage = () => {
         setLoadingText("분석 중...");
         t = 7;
       }
-      getRecordDetail(userId, dateKey || "").then((res) => {
-        if (res.statusCode === 200) {
+    }, 1000);
+
+    const timer2 = setInterval(() => {
+      getRecordDetail(userToken, dateKey || "").then((res) => {
+        if (res.status === 200) {
           clearInterval(timer);
+          clearInterval(timer2);
           navigate(`/detail/${dateKey}`);
         }
       });
-    }, 1000);
+    }, 15000);
 
     return () => {
       clearInterval(timer);
+      clearInterval(timer2);
     };
   }, []);
 

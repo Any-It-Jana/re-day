@@ -1,14 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { getRecordDetail } from "../libs/apis/GetList";
+import Text from "../components/atoms/Text";
+import { dateFormatting } from "../components/molecules/RecordListItem";
+import Spinner from "../components/atoms/Spinner";
+import styled from "styled-components";
+import { userStore } from "../libs/store/UserStore";
 
 const DetailPage = () => {
   const { dateKey } = useParams();
-  return <div>{dateKey}</div>;
+  const [txt, setTxt] = useState([]);
+  const [colorCode, setColorCode] = useState("white");
+  const [isLoading, setIsLoading] = useState(true);
+  const { userToken } = userStore();
+
+  useEffect(() => {
+    getRecordDetail(userToken, dateKey as string).then((res) => {
+      setTxt(res.data.text.split("."));
+      setColorCode(res.data.colorCode);
+      setIsLoading(false);
+    });
+  }, []);
+
+  return (
+    <Article color={colorCode}>
+      <Text color={isLoading ? "black" : "white"} fontSize={1.3}>
+        {dateFormatting(dateKey as string)}
+      </Text>
+      {isLoading ? (
+        <Spinner color="dark" />
+      ) : (
+        <Div>
+          {txt.map((text: string, idx: number) => {
+            return (
+              <Text
+                color={isLoading ? "black" : "white"}
+                key={`${dateKey}_${idx}`}
+                fontSize={1.2}>
+                {text}
+              </Text>
+            );
+          })}
+        </Div>
+      )}
+    </Article>
+  );
 };
 
-// 적당히 해당 일기의 텍스트 보여주고
-// 감정 분석 결과 보여주고
-// WordCloud 보여주면 될 거 같음
-// Background-color를 감정에 맞는 색상으로
+const Article = styled.article<{ color: string }>`
+  background-color: ${(props) => props.color};
+  gap: 50px;
+  justify-content: center;
+`;
+
+const Div = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
 
 export default DetailPage;

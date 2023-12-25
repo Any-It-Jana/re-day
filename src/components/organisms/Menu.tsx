@@ -1,20 +1,32 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import instance from "../../libs/apis/Instance";
+import { userStore } from "../../libs/store/UserStore";
 
 const Menu = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { setIsLoggedIn, setUserToken } = userStore();
 
-  // useEffect(() => {
-  //   localStorage.getItem("Re-day-Token")
-
-  // }, [])
+  useEffect(() => {
+    const token = localStorage.getItem("Re-day-token");
+    console.log(location.pathname);
+    if (location.pathname !== "/" && token === null) {
+      alert("로그인이 필요합니다.");
+      navigate("/");
+    } else {
+      instance.defaults.headers.common["Authorization"] = token;
+      setUserToken(token || "");
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   return (
     <nav>
       <Btn
         onClick={() => {
-          navigate("/");
+          navigate("/list");
         }}>
         홈
       </Btn>
@@ -26,9 +38,9 @@ const Menu = () => {
       </Btn>
       <Btn
         onClick={() => {
-          navigate("/list");
+          navigate("/word");
         }}>
-        리스트
+        통계
       </Btn>
     </nav>
   );

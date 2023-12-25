@@ -1,32 +1,57 @@
 import React, { useEffect, useState } from "react";
 import RecordListItem from "../components/molecules/RecordListItem";
 import { getRecordList } from "../libs/apis/GetList";
-import { useNavigate } from "react-router-dom";
+import Spinner from "../components/atoms/Spinner";
+import Text from "../components/atoms/Text";
+import { userStore } from "../libs/store/UserStore";
+import styled from "styled-components";
 
 const ListPage = () => {
-  const navigate = useNavigate();
   const [lst, setLst] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { userToken } = userStore();
+
   useEffect(() => {
-    const token = localStorage.getItem("Re-day-token");
-    if (token === undefined) {
-      navigate("/");
-    }
-    getRecordList(token || "").then((res) => {
-      if (res.statusCode === 200) {
-        setLst(res.body.list);
-        // 이거 리턴이 정확하게 뭔 지 모르겠는데
-        // 리턴에 맞게 res.body.이거 채우면 됨
-      }
+    getRecordList(userToken).then((res) => {
+      console.log("get list: ", res);
+      setLst(res);
+      setIsLoading(false);
     });
   }, []);
 
   return (
     <article className="recordList whiteBackground">
-      {lst.map((e, idx) => {
-        return <RecordListItem key={`${idx}`} />;
-      })}
+      <Head>
+        <Text>나의 일기</Text>
+      </Head>
+      {isLoading && !lst ? (
+        <article>
+          <Spinner color="dark" />
+        </article>
+      ) : lst.length === 0 ? (
+        <Text>아직 작성된 일기가 없습니다.</Text>
+      ) : (
+        lst.map((item, idx) => {
+          return (
+            <RecordListItem
+              key={`${idx}`}
+              date={item["dateTime"]}
+              color={item["colorCode"]}
+            />
+          );
+        })
+      )}
     </article>
   );
 };
+
+const Head = styled.header`
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid #777;
+`;
 
 export default ListPage;

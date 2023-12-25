@@ -28,6 +28,7 @@ const RegisterPage = () => {
   const sendAuthCode = async () => {
     const response = await emailConfirm(email, authcode);
     if (response.statusCode !== 200) {
+      console.log(response);
       alert(response.message);
       setAuthcode("");
     } else {
@@ -55,6 +56,7 @@ const RegisterPage = () => {
           }}
         />
         <Input
+          type="password"
           width="100%"
           height="50px"
           value={pw}
@@ -65,7 +67,7 @@ const RegisterPage = () => {
           }}
         />
         {hasAuthCode ? (
-          <Input
+          <Input  
             width="100%"
             height="50px"
             value={authcode}
@@ -77,6 +79,7 @@ const RegisterPage = () => {
           />
         ) : (
           <Input
+            type="password"  
             width="100%"
             height="50px"
             value={pwConfirm}
