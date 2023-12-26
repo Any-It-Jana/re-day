@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Text from "../components/atoms/Text";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -18,14 +18,12 @@ const getKoreanTime = () => {
 
 const RecordPage = () => {
   const navigate = useNavigate();
+
+  const timerRef = useRef<ReturnType<typeof setInterval> | undefined>();
   const [time, setTime] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
-  const { userEmail, setDateKey } = userStore();
+  const { userEmail } = userStore();
   const dateKey = `${getKoreanTime().slice(0, 16).replace(":", "-")}`;
-
-  useEffect(() => {
-    setDateKey(dateKey);
-  }, []);
 
   const {
     transcript,
@@ -34,22 +32,28 @@ const RecordPage = () => {
     browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
 
-  const startRecording = () => {
-    SpeechRecognition.startListening({
-      language: "ko-KR",
-      continuous: true,
-    });
+  const handleStart = () => {
     let t = 0;
-    const timer = setInterval(() => {
-      setTime((prev) => prev + 1);
-      t += 1;
-      if (t === 10) {
-        SpeechRecognition.stopListening();
-        clearInterval(timer);
-        setIsFinished(true);
-      }
-    }, 1000);
+    if (!timerRef.current) {
+      timerRef.current = setInterval(() => {
+        setTime(time + 1);
+        if (t === 10) {
+          SpeechRecognition.stopListening();
+          clearInterval(timerRef.current);
+          setIsFinished(true);
+        }
+      }, 1000);
+    }
   };
+
+  const handleStop = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      SpeechRecognition.stopListening();
+      setIsFinished(true);
+    }
+  };
+
   // 종료 및 text 데이터 서버로 전송
   const finishRecording = async () => {
     if (transcript === "") {
@@ -90,7 +94,7 @@ const RecordPage = () => {
       <ProgessWrapper>
         <img
           style={{ cursor: "pointer" }}
-          onClick={listening ? SpeechRecognition.stopListening : startRecording}
+          onClick={listening ? handleStop : handleStart}
           src="/mic.svg"
           height={100}
           alt="mic"
