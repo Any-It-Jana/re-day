@@ -5,6 +5,7 @@ import Spinner from "../components/atoms/Spinner";
 import Text from "../components/atoms/Text";
 import { userStore } from "../libs/store/UserStore";
 import styled from "styled-components";
+import Flex from "../components/atoms/Layout";
 
 const ListPage = () => {
   const [lst, setLst] = useState([]);
@@ -25,10 +26,10 @@ const ListPage = () => {
       <Head>
         <Text>나의 일기</Text>
       </Head>
-      {isLoading && !lst ? (
-        <article>
+      {isLoading ? (
+        <Flex height="100%">
           <Spinner color="dark" />
-        </article>
+        </Flex>
       ) : lst.length === 0 ? (
         <Text>아직 작성된 일기가 없습니다.</Text>
       ) : (
@@ -50,8 +51,9 @@ const Head = styled.header`
   width: 100%;
   height: 50px;
   display: flex;
-  justify-content: center;
-  border-bottom: 1px solid #777;
+  padding-left: 20px;
+  border-bottom: 1px solid #ccc;
+  color: #10346c;
 `;
 
 export default ListPage;

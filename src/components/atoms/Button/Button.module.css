@@ -1,28 +1,28 @@
 .transparent {
   border: 1px solid transparent;
   background-color: transparent;
-  color: black;
+  color: #10346c;
 }
 .transparent:hover {
   border: 1px solid transparent;
   background-color: white;
-  color: black;
+  color: #10346c;
 }
 
 .black.bg {
   border: 1px solid transparent;
-  background-color: black;
+  background-color: #10346c;
   color: white;
 }
 .black.bg:hover {
-  border: 1px solid black;
+  border: 1px solid #10346c;
   background-color: white;
-  color: black;
+  color: #10346c;
 }
 .white.bg {
   border: 1px solid transparent;
   background-color: white;
-  color: black;
+  color: #10346c;
 }
 .white.bg:hover {
   border: 1px solid white;
@@ -31,12 +31,12 @@
 }
 
 .black.border {
-  border: 1px solid black;
+  border: 1px solid #10346c;
   background-color: white;
-  color: black;
+  color: #10346c;
 }
 .black.border:hover {
-  background-color: black;
+  background-color: #10346c;
   color: white;
 }
 .white.border {
@@ -45,5 +45,5 @@
 }
 .white.border:hover {
   background-color: white;
-  color: black;
+  color: #10346c;
 }

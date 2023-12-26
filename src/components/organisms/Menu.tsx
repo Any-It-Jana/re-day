@@ -44,7 +44,7 @@ const Menu = () => {
         onClick={() => {
           navigate("/word");
         }}>
-        통계
+        통계보기
       </Btn>
     </nav>
   );
