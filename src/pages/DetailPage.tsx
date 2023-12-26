@@ -16,22 +16,26 @@ const DetailPage = () => {
 
   useEffect(() => {
     getRecordDetail(userToken, dateKey as string).then((res) => {
-      console.log("detail", res);
-      setTxt(res.body.text.split("."));
-      setColorCode(res.body.colorCode);
-      setIsLoading(false);
+      if (res.statusCode === 200) {
+        console.log("detail", res.body.emotionScore);
+        setTxt(res.body.text.split("."));
+        setColorCode(res.body.colorCode);
+        setIsLoading(false);
+      }
     });
   }, []);
 
   return (
-    <Article color={colorCode}>
-      <Text color={isLoading ? "black" : "white"} fontSize={1.3}>
-        {dateFormatting(dateKey as string)}
-      </Text>
+    <Article color={colorCode} className="recordList">
+      <Head>
+        <Text color={isLoading ? "black" : "white"} fontSize={1.3}>
+          {dateFormatting(dateKey as string)}
+        </Text>
+      </Head>
       {isLoading ? (
         <Spinner color="dark" />
       ) : (
-        <Div>
+        <TextWrapper>
           {txt.map((text: string, idx: number) => {
             return (
               <Text
@@ -42,7 +46,7 @@ const DetailPage = () => {
               </Text>
             );
           })}
-        </Div>
+        </TextWrapper>
       )}
     </Article>
   );
@@ -51,13 +55,18 @@ const DetailPage = () => {
 const Article = styled.article<{ color: string }>`
   background-color: ${(props) => props.color};
   gap: 50px;
-  justify-content: center;
 `;
-
-const Div = styled.div`
+const Head = styled.header`
+  width: 100%;
+  height: 50px;
+  display: flex;
+  border-bottom: 1px solid #ccc;
+`;
+const Section = styled.section``;
+const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 `;
 
 export default DetailPage;

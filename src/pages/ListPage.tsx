@@ -51,7 +51,6 @@ const Head = styled.header`
   width: 100%;
   height: 50px;
   display: flex;
-  padding-left: 20px;
   border-bottom: 1px solid #ccc;
   color: #10346c;
 `;
