@@ -8,7 +8,7 @@ import TestPage from "./pages/TestPage";
 import LoadingPage from "./pages/LoadingPage";
 import DetailPage from "./pages/DetailPage";
 import RegisterPage from "./pages/RegisterPage";
-import WordCloudPage from "./pages/WordCloudPage";
+import StatisticPage from "./pages/StatisticPage";
 
 const Router = () => {
   const location = useLocation();
@@ -27,7 +27,7 @@ const Router = () => {
             <Route path="/record" element={<RecordPage />} />
             <Route path="/loading/:dateKey" element={<LoadingPage />} />
             <Route path="/detail/:dateKey" element={<DetailPage />} />
-            <Route path="/word" element={<WordCloudPage />} />
+            <Route path="/word" element={<StatisticPage />} />
 
             <Route path="/test" element={<TestPage />} />
           </Routes>
