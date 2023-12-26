@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Text from "../components/atoms/Text";
 import Input from "../components/atoms/Input";
 import Button from "../components/atoms/Button";
@@ -12,17 +12,6 @@ const LoginPage = () => {
   const [pw, setPw] = useState("");
 
   const { isLoggedIn, setIsLoggedIn, setUserEmail, setUserToken } = userStore();
-
-  // 회원이면 로그인 페이지 접속 못하게 하기 -> 로그아웃 기능 없는 상태
-  useEffect(() => {
-    const token = localStorage.getItem("Re-day-token");
-    if (token !== null) {
-      setIsLoggedIn(true);
-      setUserEmail(email);
-      setUserToken(token);
-      navigate("/list");
-    }
-  }, []);
 
   const login = async () => {
     const response = await signin(email, pw);
@@ -43,7 +32,6 @@ const LoginPage = () => {
     setIsLoggedIn(false);
     setUserEmail("");
     setUserToken("");
-    localStorage.removeItem("UserInfo");
   };
   const register = () => {
     navigate("/register");

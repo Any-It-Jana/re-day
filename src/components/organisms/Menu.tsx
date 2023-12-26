@@ -10,9 +10,13 @@ const Menu = () => {
   const { setIsLoggedIn, setUserToken } = userStore();
 
   useEffect(() => {
+    if (location.pathname === "/") {
+      return;
+    }
+
     const token = localStorage.getItem("Re-day-token");
-    console.log(location.pathname);
-    if (location.pathname !== "/" && token === null) {
+    console.log(token);
+    if (token === null) {
       alert("로그인이 필요합니다.");
       navigate("/");
     } else {
