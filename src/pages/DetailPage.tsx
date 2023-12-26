@@ -21,7 +21,7 @@ const DetailPage = () => {
   useEffect(() => {
     getRecordDetail(userToken, dateKey as string).then((res) => {
       if (res.statusCode === 200) {
-        console.log("detail", res.body.emotionScore);
+        // console.log("detail", res.body.emotionScore);
         setTxt(res.body.text.split("."));
         setColorCode(res.body.colorCode);
 
@@ -63,7 +63,7 @@ const DetailPage = () => {
         <GraphWrapper>
           {graphNums.map((e, idx) => {
             return (
-              <Flex width="100%" gap="10px">
+              <Flex key={`GraphBar_${idx}`} width="100%" gap="10px">
                 <GraphBar width={`${e.val * 100}%`} color={e.color} />
                 <Text fontSize={0.8}>{Math.round(e.val * 100)}%</Text>
               </Flex>

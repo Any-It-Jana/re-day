@@ -11,7 +11,7 @@ const Menu = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("Re-day-token");
-    console.log(token);
+    // console.log(token);
     if (token === null) {
       alert("로그인이 필요합니다.");
       navigate("/");
