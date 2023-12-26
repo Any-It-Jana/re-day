@@ -26,10 +26,10 @@ const DetailPage = () => {
         setColorCode(res.body.colorCode);
 
         let temp = [];
-        temp.push({ val: res.body.emotionScore.Positive, color: "magenta" });
-        temp.push({ val: res.body.emotionScore.Negative, color: "cyan" });
-        temp.push({ val: res.body.emotionScore.Mixed, color: "yellow" });
-        temp.push({ val: res.body.emotionScore.Neutral, color: "black" });
+        temp.push({ val: res.body.emotionScore.Positive, color: "#FF5050" });
+        temp.push({ val: res.body.emotionScore.Negative, color: "#5050FF" });
+        temp.push({ val: res.body.emotionScore.Mixed, color: "#B4B4B4" });
+        temp.push({ val: res.body.emotionScore.Neutral, color: "#50FF50" });
         setGraphNums(temp);
 
         setIsLoading(false);
@@ -54,23 +54,31 @@ const DetailPage = () => {
           {dateFormatting(dateKey as string)}
         </Text>
       </Head>
+
       <GraphSection>
-        <Flex height="100%" direction="column" align="space-around">
-          {EMOTIONS.map((e) => {
-            return <Text key={`GraphTitle_${e}`}>{e}</Text>;
-          })}
-        </Flex>
         <GraphWrapper>
-          {graphNums.map((e, idx) => {
-            return (
-              <Flex key={`GraphBar_${idx}`} width="100%" gap="10px">
-                <GraphBar width={`${e.val * 100}%`} color={e.color} />
-                <Text fontSize={0.8}>{Math.round(e.val * 100)}%</Text>
-              </Flex>
-            );
-          })}
+          <Flex height="100%" direction="column" align="space-around">
+            {EMOTIONS.map((e) => {
+              return <Text key={`GraphTitle_${e}`}>{e}</Text>;
+            })}
+          </Flex>
+          <GraphBarWrapper>
+            {graphNums.map((e, idx) => {
+              return (
+                <Flex key={`GraphBar_${idx}`} width="100%" gap="10px">
+                  <GraphBar width={`${e.val * 100}%`} color={e.color} />
+                  <Text fontSize={0.8}>{Math.round(e.val * 100)}%</Text>
+                </Flex>
+              );
+            })}
+          </GraphBarWrapper>
         </GraphWrapper>
+        <GraphCaption>
+          긍정을 분홍, 부정을 파랑, 중립을 초록, 혼합을 흰색에 대응시킨 다음 RGB
+          체계를 이용해 색상 코드를 추출
+        </GraphCaption>
       </GraphSection>
+
       <TextWrapper>
         {txt.map((text: string, idx: number) => {
           return (
@@ -99,6 +107,11 @@ const Head = styled.header`
 `;
 const GraphSection = styled.section`
   display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+const GraphWrapper = styled.div`
+  display: flex;
   flex-direction: row;
   background-color: white;
   width: 100%;
@@ -107,7 +120,7 @@ const GraphSection = styled.section`
   padding: 10px;
   border-radius: 10px;
 `;
-const GraphWrapper = styled.div`
+const GraphBarWrapper = styled.div`
   width: 80%;
   height: 100%;
   display: flex;
@@ -120,6 +133,11 @@ const GraphBar = styled.div<{ width: string; color: string }>`
   width: ${(props) => props.width};
   height: 50px;
   background-color: ${(props) => props.color};
+`;
+const GraphCaption = styled.div`
+  text-align: left;
+  color: #ccc;
+  font-size: 0.7rem;
 `;
 const TextWrapper = styled.section`
   display: flex;
