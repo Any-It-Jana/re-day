@@ -16,8 +16,9 @@ const DetailPage = () => {
 
   useEffect(() => {
     getRecordDetail(userToken, dateKey as string).then((res) => {
-      setTxt(res.data.text.split("."));
-      setColorCode(res.data.colorCode);
+      console.log("detail", res);
+      setTxt(res.body.text.split("."));
+      setColorCode(res.body.colorCode);
       setIsLoading(false);
     });
   }, []);

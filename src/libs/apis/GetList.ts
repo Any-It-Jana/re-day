@@ -39,7 +39,7 @@ export async function getRecordDetail(userId: string, dateKey: string) {
     .get(`/diary/detail/${dateKey}`)
     .then((res) => {
       if (res.status === 200) {
-        return res;
+        return res.data;
       }
       else {
         alert("내용을 조회할 수 없습니다.");

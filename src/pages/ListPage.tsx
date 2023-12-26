@@ -15,7 +15,7 @@ const ListPage = () => {
   useEffect(() => {
     getRecordList(userToken).then((res) => {
       console.log("get list: ", res);
-      setLst(res);
+      setLst(res.body);
       setIsLoading(false);
     });
   }, []);
