@@ -3,12 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export async function getWordCloudImage(userToken: string) {
   return instance
-    .get("/word-cloud", {
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-        "Content-Type": "application/json",
-      },
-    })
+    .get("/word-cloud")
     .then((response) => {
       console.log("응답: ", response);
       if (response.status === 200) {
@@ -20,5 +15,8 @@ export async function getWordCloudImage(userToken: string) {
         navigate("/");
       }
     })
-    .catch((error) => console.error());
+    .catch((error) => {
+      console.error(`ERROR: ${error}`);
+      return error.response.data;
+    })
 }
