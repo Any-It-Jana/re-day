@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getRecordDetail, inv } from "../libs/apis/GetList";
+import { getRecordDetail } from "../libs/apis/GetList";
 import Text from "../components/atoms/Text";
 import { dateFormatting } from "../components/molecules/RecordListItem";
 import Spinner from "../components/atoms/Spinner";
