@@ -13,12 +13,12 @@ const Menu = () => {
     const token = localStorage.getItem("Re-day-token");
     // console.log(token);
     if (token === null) {
+      if (location.pathname === "/") {
+        return;
+      }
       alert("로그인이 필요합니다.");
       navigate("/");
     } else {
-      if (location.pathname === "/") {
-        navigate("/list");
-      }
       instance.defaults.headers.common["Authorization"] = token;
       setUserToken(token || "");
       setIsLoggedIn(true);

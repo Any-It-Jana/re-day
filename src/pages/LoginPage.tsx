@@ -5,16 +5,20 @@ import Button from "../components/atoms/Button";
 import { useNavigate } from "react-router-dom";
 import { signin } from "../libs/apis/Auth";
 import { userStore } from "../libs/store/UserStore";
+import Spinner from "../components/atoms/Spinner";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { isLoggedIn, setIsLoggedIn, setUserEmail, setUserToken } = userStore();
 
   const login = async () => {
+    setIsLoading(true);
     const response = await signin(email, pw);
+    setIsLoading(false);
     if (response.statusCode !== 200) {
       alert(response.message);
       setEmail("");
@@ -37,6 +41,13 @@ const LoginPage = () => {
     navigate("/register");
   };
 
+  if (isLoading) {
+    return (
+      <article>
+        <Spinner />
+      </article>
+    );
+  }
   return (
     <article className="login">
       <div>

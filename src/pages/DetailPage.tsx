@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getRecordDetail } from "../libs/apis/GetList";
+import { getRecordDetail, inv } from "../libs/apis/GetList";
 import Text from "../components/atoms/Text";
 import { dateFormatting } from "../components/molecules/RecordListItem";
 import Spinner from "../components/atoms/Spinner";
@@ -54,6 +54,16 @@ const DetailPage = () => {
           {dateFormatting(dateKey as string)}
         </Text>
       </Head>
+
+      <iframe
+        title="spotify"
+        style={{ borderRadius: "10px" }}
+        src="https://open.spotify.com/embed/track/7jPCPDYoiaKeK7cgNGpIzq?utm_source=generator"
+        width="100%"
+        height="80"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+      />
 
       <GraphSection>
         <GraphWrapper>
@@ -136,7 +146,7 @@ const GraphBar = styled.div<{ width: string; color: string }>`
 `;
 const GraphCaption = styled.div`
   text-align: left;
-  color: #ccc;
+  color: #eee;
   font-size: 0.7rem;
 `;
 const TextWrapper = styled.section`
