@@ -41,7 +41,7 @@ const StatisticPage = () => {
           <Text fontSize={1.5}>Word Cloud</Text>
         </Flex>
         {isLoading ? (
-          <Flex width="100%" height="calc(100dvw - 80px" align="center">
+          <Flex width="100%" height="calc(100dvw - 80px)" align="center">
             <Spinner color="dark" />
           </Flex>
         ) : imgUrl ? (
