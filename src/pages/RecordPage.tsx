@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Text from "../components/atoms/Text";
 import { useNavigate } from "react-router-dom";
-import { getCheerList } from "../libs/apis/Cheer";
+import { getCheerList, updateCheerLike } from "../libs/apis/Cheer";
 import styled from "styled-components";
 import Button from "../components/atoms/Button";
 import { userStore } from "../libs/store/UserStore";
@@ -22,6 +22,7 @@ const RecordPage = () => {
 
   const timerRef = useRef<ReturnType<typeof setInterval> | undefined>();
   const [time, setTime] = useState(0);
+  const [fetchFlag, setFetchFlag] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const { userEmail, userToken } = userStore();
   const dateKey = `${getKoreanTime().slice(0, 16).replace(":", "-")}`;
@@ -33,9 +34,15 @@ const RecordPage = () => {
     browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
 
+  const [testText, setTestText] = useState("");
+  const [testUserName, setTestUserName] = useState("");
+
   useEffect(() => {
     getCheerList(userToken).then((res) => {
       console.log("get cheer list: ", res);
+      setTestText(res.body[0]['text']);
+      setTestUserName(res.body[0]['userName']);
+      setFetchFlag(true);
     });
   }, []);
 
@@ -80,6 +87,17 @@ const RecordPage = () => {
   return (
     <article className="record">
       <TranscriptWrapper>
+        {
+          fetchFlag &&
+          <div style={{display: 'flex'}}>
+            <Text color="white" fontSize={1.5}>
+              {testText}
+            </Text>
+            <Button color="white" onClick={() => updateCheerLike(testUserName, testText)}>
+              Like
+            </Button>
+          </div>
+        }
         {transcript === "" ? (
           <Text color="white" fontSize={1.5}>
             오늘 하루는 어땠나요?
@@ -87,6 +105,7 @@ const RecordPage = () => {
         ) : (
           <Text color="white">{transcript}</Text>
         )}
+        
       </TranscriptWrapper>
 
       <Row visibility={isFinished ? "visible" : "hidden"}>

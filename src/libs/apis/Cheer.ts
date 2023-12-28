@@ -17,6 +17,24 @@ export async function getCheerList(userId: string) {
           navigate("/");
         }
       })
-      .catch((error) => console.error())
+      .catch((error) => console.error("ERROR", error))
   );
+}
+
+export async function updateCheerLike(userName: string, text: string) {
+    return (
+        instance
+        .put("/cheer/like", {userName: userName, text: text})
+    )
+    .then((response) => {
+        console.log("RESPONSE", response);
+        if (response.data.statusCode === 200) {
+            console.log("LIKE", response.data.response);
+        }
+        return response.data;
+    })
+    .catch((error) => {
+        console.error("ERROR", error);
+        return error.response.data;
+    });
 }
