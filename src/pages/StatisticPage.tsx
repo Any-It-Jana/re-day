@@ -89,7 +89,7 @@ const StatisticPage = () => {
       </Section>
       <Section>
         <Flex width="100%">
-          <Text fontSize={1.5}>공감 글귀</Text>
+          <Text fontSize={1.5}>응원 문구</Text>
         </Flex>
         <Flex width="100%" direction="column" gap="10px">
           {isCheerLoading ? (
