@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Text from "../components/atoms/Text";
 import { useNavigate } from "react-router-dom";
-import { getCheerList, updateCheerLike } from "../libs/apis/Cheer";
 import styled from "styled-components";
 import Button from "../components/atoms/Button";
 import { userStore } from "../libs/store/UserStore";
@@ -35,10 +34,11 @@ const RecordPage = () => {
 
   const handleStart = () => {
     let t = 0;
-    SpeechRecognition.startListening();
+    SpeechRecognition.startListening({ continuous: true });
     if (!timerRef.current) {
       timerRef.current = setInterval(() => {
         setTime((prev) => prev + 1);
+        t += 1;
         if (t === 10) {
           SpeechRecognition.stopListening();
           clearInterval(timerRef.current);

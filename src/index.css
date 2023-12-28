@@ -261,3 +261,7 @@ textarea {
   transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
   opacity: 0;
 }
+
+div::-webkit-scrollbar {
+  display: none;
+}
