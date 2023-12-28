@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Text from "../components/atoms/Text";
 import { useNavigate } from "react-router-dom";
+import { getCheerList } from "../libs/apis/Cheer";
 import styled from "styled-components";
 import Button from "../components/atoms/Button";
 import { userStore } from "../libs/store/UserStore";
@@ -22,7 +23,7 @@ const RecordPage = () => {
   const timerRef = useRef<ReturnType<typeof setInterval> | undefined>();
   const [time, setTime] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
-  const { userEmail } = userStore();
+  const { userEmail, userToken } = userStore();
   const dateKey = `${getKoreanTime().slice(0, 16).replace(":", "-")}`;
 
   const {
@@ -31,6 +32,12 @@ const RecordPage = () => {
     resetTranscript,
     browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
+
+  useEffect(() => {
+    getCheerList(userToken).then((res) => {
+      console.log("get cheer list: ", res);
+    });
+  }, []);
 
   const handleStart = () => {
     let t = 0;
