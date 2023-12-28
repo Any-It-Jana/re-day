@@ -13,7 +13,7 @@ const StatisticPage = () => {
   const [canUpdate, setCanUpdate] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isWordCloudLoading, setIsWordCloudLoading] = useState(true);
-  const [cheerList, setCheerList] = useState([]);
+  const [cheerList, setCheerList] = useState<any[]>([]);
   const [isCheerLoading, setIsCheerLoading] = useState(true);
   const { userToken } = userStore();
 
@@ -21,6 +21,7 @@ const StatisticPage = () => {
     setIsWordCloudLoading(true);
     getWordCloudImage(userToken).then((res) => {
       setIsWordCloudLoading(false);
+      console.log(res);
       if (res.statusCode === 200) {
         setImgUrl(res.body.url);
         setIsUpdating(res.body.img_making);
@@ -29,16 +30,12 @@ const StatisticPage = () => {
     });
     return;
   };
-  const cheerUp = (username: string, txt: string) => {
-    setIsCheerLoading(true);
+  const cheerUp = (idx: number, username: string, txt: string) => {
     updateCheerLike(username, txt).then((res) => {
       if (res.message === "좋아요가 반영되었습니다.") {
-        getCheerList(userToken).then((res) => {
-          setIsCheerLoading(false);
-          if (res.statusCode === 200) {
-            setCheerList(res.body);
-          }
-        });
+        let temp: any = cheerList;
+        temp[idx].likeCount = Number(temp[idx].likeCount) + 1;
+        setCheerList([...temp]);
       }
     });
     return;
@@ -48,6 +45,7 @@ const StatisticPage = () => {
     getWordCloudImage(userToken).then((res) => {
       // data에 message 담긴 경우 -> 이미지 생성 중
       setIsWordCloudLoading(false);
+      console.log(res);
       if (res.statusCode === 200) {
         setImgUrl(res.body.url);
         setIsUpdating(res.body.img_making);
@@ -57,7 +55,6 @@ const StatisticPage = () => {
     getCheerList(userToken).then((res) => {
       setIsCheerLoading(false);
       if (res.statusCode === 200) {
-        console.log(res.body);
         setCheerList(res.body);
       }
     });
@@ -100,7 +97,7 @@ const StatisticPage = () => {
               <Spinner color="dark" />
             </Flex>
           ) : (
-            cheerList.map((e: any) => {
+            cheerList.map((e: any, idx) => {
               return (
                 <Flex
                   key={`CheerItem_${e.text}`}
@@ -114,7 +111,7 @@ const StatisticPage = () => {
                     <Button
                       color="black"
                       onClick={() => {
-                        cheerUp(e.userName, e.text);
+                        cheerUp(idx, e.userName, e.text);
                       }}>
                       <img src="/thumb_up.svg" />
                     </Button>
