@@ -6,12 +6,15 @@ import Text from "../components/atoms/Text";
 import { userStore } from "../libs/store/UserStore";
 import styled from "styled-components";
 import Flex from "../components/atoms/Layout";
+import Button from "../components/atoms/Button";
+import { useNavigate } from "react-router-dom";
 
 const ListPage = () => {
+  const navigate = useNavigate();
   const [lst, setLst] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { userToken } = userStore();
+  const { userToken, setIsLoggedIn, setUserEmail, setUserToken } = userStore();
 
   useEffect(() => {
     getRecordList(userToken).then((res) => {
@@ -20,11 +23,21 @@ const ListPage = () => {
       setIsLoading(false);
     });
   }, []);
+  const logout = () => {
+    localStorage.removeItem("Re-day-token");
+    setIsLoggedIn(false);
+    setUserEmail("");
+    setUserToken("");
+    navigate("/");
+  };
 
   return (
     <article className="recordList whiteBackground">
       <Head>
         <Text>나의 일기</Text>
+        <Button onClick={logout}>
+          <img src="/logout.svg" />
+        </Button>
       </Head>
       {isLoading ? (
         <Flex height="100%">
@@ -50,7 +63,6 @@ const ListPage = () => {
 const Head = styled.header`
   width: 100%;
   height: 50px;
-  display: flex;
   border-bottom: 1px solid #ccc;
   color: #10346c;
 `;

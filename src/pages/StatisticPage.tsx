@@ -17,6 +17,9 @@ const StatisticPage = () => {
   const updateWordCloud = () => {
     return;
   };
+  const cheerUp = () => {
+    return;
+  };
 
   useEffect(() => {
     getWordCloudImage(userToken).then((res) => {
@@ -59,6 +62,22 @@ const StatisticPage = () => {
         ) : (
           <Text>녹음이 없거나 생성할 수 없어요...</Text>
         )}
+      </Section>
+      <Section>
+        <Flex width="100%">
+          <Text fontSize={1.5}>공감 글귀</Text>
+        </Flex>
+        <Flex width="100%" height="calc(100dvw - 80px)" direction="column">
+          <Flex width="100%" align="space-between">
+            <Text>asdf</Text>
+            <Flex gap="10px">
+              <Text>80</Text>
+              <Button color="black" onClick={cheerUp}>
+                <img src="/thumb_up.svg" />
+              </Button>
+            </Flex>
+          </Flex>
+        </Flex>
       </Section>
     </article>
   );

@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { getSpotifyUri } from "../libs/apis/GetList";
-import axios from "axios";
 import Text from "../components/atoms/Text";
+import { getCheerList } from "../libs/apis/Cheer";
 
 const TestPage = () => {
   useEffect(() => {
-    getSpotifyUri();
+    getSpotifyUri().then((res) => {
+      console.log(res);
+    });
   }, []);
 
   return (

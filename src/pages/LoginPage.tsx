@@ -59,6 +59,11 @@ const LoginPage = () => {
       {!isLoggedIn ? (
         <section>
           <form
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "20px",
+            }}
             onSubmit={(e) => {
               e.preventDefault();
             }}>

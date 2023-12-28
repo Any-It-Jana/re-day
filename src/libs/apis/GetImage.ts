@@ -5,9 +5,9 @@ export async function getWordCloudImage(userToken: string) {
   return instance
     .get("/word-cloud")
     .then((response) => {
-      console.log("응답: ", response);
+      // console.log("응답: ", response);
       if (response.status === 200) {
-        console.log("RES", response);
+        // console.log("RES", response);
         return response.data;
       } else {
         alert("통계를 조회할 수 없습니다.");
@@ -18,5 +18,5 @@ export async function getWordCloudImage(userToken: string) {
     .catch((error) => {
       console.error(`ERROR: ${error}`);
       return error.response.data;
-    })
+    });
 }
