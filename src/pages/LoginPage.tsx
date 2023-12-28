@@ -53,7 +53,7 @@ const LoginPage = () => {
       <div>
         <img src="/book.svg" height={150} width={200} />
         <Text color="white" fontSize={1.5}>
-          Re-Day
+          아니 있잖아
         </Text>
       </div>
       {!isLoggedIn ? (
@@ -96,7 +96,7 @@ const LoginPage = () => {
               height="50px">
               로그인
             </Button>
-            <Button onClick={register} width="100%">
+            <Button color="white" onClick={register} width="100%" height="50px">
               회원가입
             </Button>
           </form>

@@ -16,7 +16,7 @@ const Menu = () => {
     const token = localStorage.getItem("Re-day-token");
     // console.log(token);
     if (token === null) {
-      if (location.pathname === "/") {
+      if (location.pathname === "/" || location.pathname === "/register") {
         return;
       }
       alert("로그인이 필요합니다.");
@@ -27,6 +27,10 @@ const Menu = () => {
       setIsLoggedIn(true);
     }
   }, []);
+
+  if (location.pathname === "/" || location.pathname === "/register") {
+    return <Blank />;
+  }
 
   return (
     <nav>
@@ -56,6 +60,9 @@ const Btn = styled.button`
   width: 33%;
   height: 50px;
   background-color: white;
+`;
+const Blank = styled.nav`
+  background-color: #10346c;
 `;
 
 export default Menu;
