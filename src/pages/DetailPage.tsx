@@ -14,6 +14,7 @@ const DetailPage = () => {
   const [colorCode, setColorCode] = useState("white");
   const [isLoading, setIsLoading] = useState(true);
   const [graphNums, setGraphNums] = useState<any[]>([]);
+  const [spotifyURI, setSpotifyURI] = useState("");
   const { userToken } = userStore();
 
   const EMOTIONS = ["긍정", "부정", "혼합", "중립"];
@@ -24,6 +25,7 @@ const DetailPage = () => {
         // console.log("detail", res.body.emotionScore);
         setTxt(res.body.text.split("."));
         setColorCode(res.body.colorCode);
+        setSpotifyURI(res.body.musicSource);
 
         let temp = [];
         temp.push({ val: res.body.emotionScore.Positive, color: "#FF5050" });
@@ -55,10 +57,23 @@ const DetailPage = () => {
         </Text>
       </Head>
 
+      <TextWrapper>
+        {txt.map((text: string, idx: number) => {
+          return (
+            <Text
+              color={isLoading ? "black" : "white"}
+              key={`${dateKey}_${idx}`}
+              fontSize={1.2}>
+              {text}
+            </Text>
+          );
+        })}
+      </TextWrapper>
+
       <iframe
         title="spotify"
         style={{ borderRadius: "10px" }}
-        src="https://open.spotify.com/embed/track/7jPCPDYoiaKeK7cgNGpIzq?utm_source=generator"
+        src={`https://open.spotify.com/embed/track/${spotifyURI}?utm_source=generator`}
         width="100%"
         height="80"
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
@@ -88,19 +103,6 @@ const DetailPage = () => {
           체계를 이용해 색상 코드를 추출
         </GraphCaption>
       </GraphSection>
-
-      <TextWrapper>
-        {txt.map((text: string, idx: number) => {
-          return (
-            <Text
-              color={isLoading ? "black" : "white"}
-              key={`${dateKey}_${idx}`}
-              fontSize={1.2}>
-              {text}
-            </Text>
-          );
-        })}
-      </TextWrapper>
     </Article>
   );
 };
