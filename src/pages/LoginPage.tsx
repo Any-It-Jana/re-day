@@ -58,38 +58,43 @@ const LoginPage = () => {
       </div>
       {!isLoggedIn ? (
         <section>
-          <Input
-            width="100%"
-            height="50px"
-            value={email}
-            placeholder="Email"
-            name="email"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setEmail(e.target.value);
-            }}
-          />
-          <Input
-            type="password"
-            width="100%"
-            height="50px"
-            value={pw}
-            placeholder="PW"
-            name="pw"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setPw(e.target.value);
-            }}
-          />
-          <Button
-            type="bg"
-            onClick={login}
-            color="white"
-            width="100%"
-            height="50px">
-            로그인
-          </Button>
-          <Button onClick={register} width="100%">
-            회원가입
-          </Button>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}>
+            <Input
+              width="100%"
+              height="50px"
+              value={email}
+              placeholder="Email"
+              name="email"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <Input
+              type="password"
+              width="100%"
+              height="50px"
+              value={pw}
+              placeholder="PW"
+              name="pw"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setPw(e.target.value);
+              }}
+            />
+            <Button
+              type="bg"
+              onClick={login}
+              color="white"
+              width="100%"
+              height="50px">
+              로그인
+            </Button>
+            <Button onClick={register} width="100%">
+              회원가입
+            </Button>
+          </form>
         </section>
       ) : (
         <section>

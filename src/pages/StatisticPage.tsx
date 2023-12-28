@@ -41,7 +41,7 @@ const StatisticPage = () => {
           <Text fontSize={1.5}>Word Cloud</Text>
         </Flex>
         {isLoading ? (
-          <Flex width="100%" height="300px" align="center">
+          <Flex width="100%" height="calc(100dvw - 80px" align="center">
             <Spinner color="dark" />
           </Flex>
         ) : imgUrl ? (
@@ -78,7 +78,8 @@ const Section = styled.section`
   padding: 20px;
 `;
 const WordCloud = styled.img`
-  width: 100%;
+  width: calc(100dvw - 80px);
+  height: calc(100dvw - 80px);
   object-fit: contain;
   /* border: 1px solid #eee; */
 `;

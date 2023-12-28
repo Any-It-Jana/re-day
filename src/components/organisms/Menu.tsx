@@ -10,6 +10,9 @@ const Menu = () => {
   const { setIsLoggedIn, setUserToken } = userStore();
 
   useEffect(() => {
+    // if (location.pathname === "/test") {
+    //   return;
+    // }
     const token = localStorage.getItem("Re-day-token");
     // console.log(token);
     if (token === null) {

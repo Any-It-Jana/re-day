@@ -1,24 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { getRecordList } from "../libs/apis/GetList";
+import React, { useEffect } from "react";
+import { getSpotifyUri } from "../libs/apis/GetList";
+import axios from "axios";
+import Text from "../components/atoms/Text";
 
 const TestPage = () => {
-  const [count, setCount] = useState(0);
-
   useEffect(() => {
-    // const timer = setInterval(() => {
-    //   setCount((prev) => prev + 1);
-    // }, 1000);
-
-    // return () => {
-    //   clearInterval(timer);
-    // };
-
-    getRecordList("1");
+    getSpotifyUri();
   }, []);
 
   return (
     <div className="App">
-      <h1>{count}</h1>
+      <Text color="white">테스트 페이지</Text>
     </div>
   );
 };
