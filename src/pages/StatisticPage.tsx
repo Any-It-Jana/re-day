@@ -6,38 +6,58 @@ import Flex from "../components/atoms/Layout";
 import Button from "../components/atoms/Button";
 import styled from "styled-components";
 import Spinner from "../components/atoms/Spinner";
-import { getCheerList } from "../libs/apis/Cheer";
+import { getCheerList, updateCheerLike } from "../libs/apis/Cheer";
 
 const StatisticPage = () => {
   const [imgUrl, setImgUrl] = useState(null);
   const [canUpdate, setCanUpdate] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isWordCloudLoading, setIsWordCloudLoading] = useState(true);
   const [cheerList, setCheerList] = useState([]);
+  const [isCheerLoading, setIsCheerLoading] = useState(true);
   const { userToken } = userStore();
 
   const updateWordCloud = () => {
+    setIsWordCloudLoading(true);
+    getWordCloudImage(userToken).then((res) => {
+      setIsWordCloudLoading(false);
+      if (res.statusCode === 200) {
+        setImgUrl(res.body.url);
+        setIsUpdating(res.body.img_making);
+        setCanUpdate(res.body.update_exist);
+      }
+    });
     return;
   };
-  const cheerUp = () => {
+  const cheerUp = (username: string, txt: string) => {
+    setIsCheerLoading(true);
+    updateCheerLike(username, txt).then((res) => {
+      if (res.message === "좋아요가 반영되었습니다.") {
+        getCheerList(userToken).then((res) => {
+          setIsCheerLoading(false);
+          if (res.statusCode === 200) {
+            setCheerList(res.body);
+          }
+        });
+      }
+    });
     return;
   };
 
   useEffect(() => {
     getWordCloudImage(userToken).then((res) => {
       // data에 message 담긴 경우 -> 이미지 생성 중
-      setIsLoading(false);
-      console.log(res.body);
+      setIsWordCloudLoading(false);
       if (res.statusCode === 200) {
         setImgUrl(res.body.url);
         setIsUpdating(res.body.img_making);
         setCanUpdate(res.body.update_exist);
-        // setIsUpdating(true);
-        // setCanUpdate(true);
       }
     });
     getCheerList(userToken).then((res) => {
+      setIsCheerLoading(false);
       if (res.statusCode === 200) {
+        console.log(res.body);
         setCheerList(res.body);
       }
     });
@@ -52,7 +72,7 @@ const StatisticPage = () => {
         </Flex>
         <Flex direction="column" gap="20px">
           <Flex width="100%" height="calc(100dvw - 80px)" align="center">
-            {isLoading ? (
+            {isWordCloudLoading ? (
               <Spinner color="dark" />
             ) : imgUrl ? (
               <WordCloud src={imgUrl} alt="Word Cloud" />
@@ -75,24 +95,34 @@ const StatisticPage = () => {
           <Text fontSize={1.5}>공감 글귀</Text>
         </Flex>
         <Flex width="100%" direction="column" gap="10px">
-          {cheerList.map((e: any) => {
-            return (
-              <Flex
-                key={`CheerItem_${e.text}`}
-                width="100%"
-                align="space-between">
-                <Flex width="50dvw">
-                  <Text>{e.text}</Text>
+          {isCheerLoading ? (
+            <Flex height="200px">
+              <Spinner color="dark" />
+            </Flex>
+          ) : (
+            cheerList.map((e: any) => {
+              return (
+                <Flex
+                  key={`CheerItem_${e.text}`}
+                  width="100%"
+                  align="space-between">
+                  <Flex width="50dvw">
+                    <Text>{e.text}</Text>
+                  </Flex>
+                  <Flex gap="10px">
+                    <Text>{e.likeCount}</Text>
+                    <Button
+                      color="black"
+                      onClick={() => {
+                        cheerUp(e.userName, e.text);
+                      }}>
+                      <img src="/thumb_up.svg" />
+                    </Button>
+                  </Flex>
                 </Flex>
-                <Flex gap="10px">
-                  <Text>{e.likeCount}</Text>
-                  <Button color="black" onClick={cheerUp}>
-                    <img src="/thumb_up.svg" />
-                  </Button>
-                </Flex>
-              </Flex>
-            );
-          })}
+              );
+            })
+          )}
         </Flex>
       </Section>
     </article>
