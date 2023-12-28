@@ -6,12 +6,14 @@ import Flex from "../components/atoms/Layout";
 import Button from "../components/atoms/Button";
 import styled from "styled-components";
 import Spinner from "../components/atoms/Spinner";
+import { getCheerList } from "../libs/apis/Cheer";
 
 const StatisticPage = () => {
   const [imgUrl, setImgUrl] = useState(null);
   const [canUpdate, setCanUpdate] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [cheerList, setCheerList] = useState([]);
   const { userToken } = userStore();
 
   const updateWordCloud = () => {
@@ -23,9 +25,9 @@ const StatisticPage = () => {
 
   useEffect(() => {
     getWordCloudImage(userToken).then((res) => {
-      console.log(res);
       // data에 message 담긴 경우 -> 이미지 생성 중
       setIsLoading(false);
+      console.log(res.body);
       if (res.statusCode === 200) {
         setImgUrl(res.body.url);
         setIsUpdating(res.body.img_making);
@@ -34,7 +36,12 @@ const StatisticPage = () => {
         // setCanUpdate(true);
       }
     });
-  });
+    getCheerList(userToken).then((res) => {
+      if (res.statusCode === 200) {
+        setCheerList(res.body);
+      }
+    });
+  }, []);
 
   return (
     <article className="whiteBackground recordList">
@@ -43,40 +50,49 @@ const StatisticPage = () => {
         <Flex width="100%">
           <Text fontSize={1.5}>Word Cloud</Text>
         </Flex>
-        {isLoading ? (
+        <Flex direction="column" gap="20px">
           <Flex width="100%" height="calc(100dvw - 80px)" align="center">
-            <Spinner color="dark" />
-          </Flex>
-        ) : imgUrl ? (
-          <Flex direction="column" gap="20px">
-            <WordCloud src={imgUrl} alt="Word Cloud" />
-            {canUpdate && (
-              <Button color="black" onClick={updateWordCloud}>
-                최근 일기 적용하기
-              </Button>
-            )}
-            {isUpdating && (
-              <Text fontSize={1.2}>최근 일기를 적용해 생성 중...</Text>
+            {isLoading ? (
+              <Spinner color="dark" />
+            ) : imgUrl ? (
+              <WordCloud src={imgUrl} alt="Word Cloud" />
+            ) : (
+              <Text>생성된 워드클라우드가 없어요</Text>
             )}
           </Flex>
-        ) : (
-          <Text>녹음이 없거나 생성할 수 없어요...</Text>
-        )}
+          {canUpdate && (
+            <Button color="black" onClick={updateWordCloud}>
+              최근 일기 적용하기
+            </Button>
+          )}
+          {isUpdating && (
+            <Text fontSize={1.2}>최근 일기를 적용해 생성 중...</Text>
+          )}
+        </Flex>
       </Section>
       <Section>
         <Flex width="100%">
           <Text fontSize={1.5}>공감 글귀</Text>
         </Flex>
-        <Flex width="100%" height="calc(100dvw - 80px)" direction="column">
-          <Flex width="100%" align="space-between">
-            <Text>asdf</Text>
-            <Flex gap="10px">
-              <Text>80</Text>
-              <Button color="black" onClick={cheerUp}>
-                <img src="/thumb_up.svg" />
-              </Button>
-            </Flex>
-          </Flex>
+        <Flex width="100%" direction="column" gap="10px">
+          {cheerList.map((e: any) => {
+            return (
+              <Flex
+                key={`CheerItem_${e.text}`}
+                width="100%"
+                align="space-between">
+                <Flex width="50dvw">
+                  <Text>{e.text}</Text>
+                </Flex>
+                <Flex gap="10px">
+                  <Text>{e.likeCount}</Text>
+                  <Button color="black" onClick={cheerUp}>
+                    <img src="/thumb_up.svg" />
+                  </Button>
+                </Flex>
+              </Flex>
+            );
+          })}
         </Flex>
       </Section>
     </article>
