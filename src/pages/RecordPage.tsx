@@ -39,7 +39,7 @@ const RecordPage = () => {
       timerRef.current = setInterval(() => {
         setTime((prev) => prev + 1);
         t += 1;
-        if (t === 10) {
+        if (t === 60) {
           SpeechRecognition.stopListening();
           clearInterval(timerRef.current);
           setIsFinished(true);
