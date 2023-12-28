@@ -29,7 +29,7 @@ const LoadingPage = () => {
 
     const timer2 = setInterval(() => {
       getRecordDetail(userToken, dateKey || "").then((res) => {
-        if (res.status === 200) {
+        if (res.statusCode === 200) {
           clearInterval(timer);
           clearInterval(timer2);
           navigate(`/detail/${dateKey}`);

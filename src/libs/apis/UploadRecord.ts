@@ -12,7 +12,7 @@ export async function uploadText(email: string, dateKey: string, text: string) {
     .then((response) => {
       console.log("RESPONSE", response);
       if (response.data.statusCode === 200) {
-        console.log("callGPT", response.data.response);
+        console.log("callGPT", response.data);
       }
       return response.data;
     })

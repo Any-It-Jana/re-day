@@ -40,6 +40,7 @@ export function getRecordDetail(userId: string, dateKey: string) {
   return instance
     .get(`/diary/detail/${dateKey}`)
     .then((res) => {
+      console.log("DETAIL", res);
       if (res.status === 200) {
         return res.data;
       } else {

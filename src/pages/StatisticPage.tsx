@@ -55,7 +55,11 @@ const StatisticPage = () => {
     getCheerList(userToken).then((res) => {
       setIsCheerLoading(false);
       if (res.statusCode === 200) {
-        setCheerList(res.body);
+        console.log("data", res.body);
+        const data = res.body.sort(function(first : any, second : any) {
+          return second.likeCount - first.likeCount;
+        })
+        setCheerList(data);
       }
     });
   }, []);
